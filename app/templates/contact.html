@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block css %}
+
+{% endblock %}
+
+{% block main %}
+    <div><h1>Contact Form</h1></div><hr>
+    <div>
+        <div>
+            
+            <small class="text-muted">Fill in this form to contact the site owners</small><br><br>
+        </div>
+        <form action="{{ url_for('contact') }}" method="post">
+            {% for message in form.name.errors %}
+                <div class="flash">{{ message }}</div>
+            {% endfor %}
+
+            {% for message in form.Email.errors %}
+                 <div class="flash">{{ message }}</div>
+            {% endfor %}
+
+            {% for message in form.Subject.errors %}
+                <div class="flash">{{ message }}</div>
+            {% endfor %}
+
+            {% for message in form.Message.errors %}
+                <div class="flash">{{ message }}</div>
+            {% endfor %}
+            <div class="well well-lg">
+                <label for="name">Name <span style="color:red">(Required)</span></label>
+                <div>
+                    <small >Please enter your full name</small>
+                </div>
+                {{ form.name }}
+                <br> </br>
+                <label for="Email">E-mail <span style="color:red">(Required)</span></label>
+                <div>
+                    <small class="text-muted">Please enter your e-mail address</small>
+                </div>
+                {{ form.Email}}
+                <br> </br>
+                <label for="Subject">Subject <span style="color:red">(Required)</span></label>
+                <div>
+                    <small class="text-muted">Please enter the subject: for your message.</small>
+                </div>
+                {{ form.Subject }}
+                <br> </br>
+                <label for="Message">Message <span style="color:red">(Required)</span></label>
+                <div>
+                    <small class="text-muted">Please enter the message you would like to send.</small>
+                </div>
+                {{ form.Message }}
+                <br> </br>
+                 {{ form.Submit }}
+            </div>
+        </form>
+    </div>
+{% endblock %}

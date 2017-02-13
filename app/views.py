@@ -6,14 +6,17 @@ This file creates your application.
 """
 
 from app import app
-from flask import render_template, request, redirect, url_for
+from flask import render_template, redirect,request, flash, url_for
+import sendemail
+from .sendemail import *
+from form import ContactForm
 
 
 ###
 # Routing for your application.
 ###
 
-@app.route('/')
+@app.route('/home/')
 def home():
     """Render website's home page."""
     return render_template('home.html')
@@ -22,7 +25,29 @@ def home():
 @app.route('/about/')
 def about():
     """Render the website's about page."""
-    return render_template('about.html', name="Mary Jane")
+    return render_template('about.html', name="An Email Sending Form")
+
+@app.route('/')
+@app.route('/contact/',methods=['GET','POST'])
+def contact():
+    form = ContactForm(csrf_enabled=False)
+    if request.method=='POST':
+         if form.validate() == False:
+            flash('Please fill out all the Fields.')
+            return render_template('contact.html',form=form)
+
+         else:
+            from_name = request.form["name"]
+            from_email = request.form["Email"]
+            subject = request.form["Subject"]
+            msg = request.form["Message"]
+            send_email(from_name,from_email,subject,msg)
+
+            flash('Your email was Successfully Sent.')
+            return redirect(url_for('home'))
+            
+    elif request.method=='GET':
+         return render_template('contact.html', form=form)
 
 
 ###
@@ -54,4 +79,4 @@ def page_not_found(error):
 
 
 if __name__ == '__main__':
-    app.run(debug=True,host="0.0.0.0",port="8080")
+        app.run(debug=True,host="0.0.0.0",port="8080")
